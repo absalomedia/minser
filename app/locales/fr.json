@@ -1,0 +1,46 @@
+{
+  "main": {
+    "header": "Gestionnaire Vagabond",
+    "version": "V {{version}}",
+    "downloadLatest": "Télécharger la dernière version",
+    "about": "Sur",
+    "aboutVM": "Sur | Gestionnaire Vagabond",
+    "settings": "Paramètres",
+    "add": "Ajouter",
+    "quit": "Quitter",
+    "startAtLogin": "Démarrage automatique",
+    "resetToDefaults": "Réinitialiser les paramètres par défaut",
+    "areYouSure": "Êtes-vous sûr?",
+    "yes": "Oui",
+    "no": "Non",
+    "up": "Au-dessus de",
+    "provision": "Disposition",
+    "suspend": "Suspendre",
+    "resume": "Reprendre",
+    "reload": "Recharger",    
+    "halt": "Arrêt",
+    "destroy": "Détruire",
+    "update": "Mise à jour du plugin",
+    "repair": "Réparation de plugins",
+    "box": "Boîte",
+    "provider": "Fournisseur",
+    "status": "Statut" 
+  },
+   "about": {
+    "vm": "Gestionnaire Vagabond",
+    "vmApp": "Gérer vos machines vagabondes",
+    "latestVersion": "la dernière version:",
+    "checking": "Vérification...",
+    "downloading": "Téléchargement",
+    "copyright": "Droits d'auteur",
+    "sponsor": "Sponsorisé par"
+  },
+  "settings": {
+    "settings": "Paramètres",
+    "language": "La langue",
+    "resetToDefaults": "Réinitialiser les paramètres par défaut"
+  },
+  "process": {
+    "newVersion": "Nouvelle version est disponible!"
+  }
+}

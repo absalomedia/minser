@@ -1,0 +1,46 @@
+{
+  "main": {
+    "header": "Minser",
+    "version": "V {{version}}",
+    "downloadLatest": "Stáhnout nejnovější verzi",
+    "about": "O",
+    "aboutVM": "O | Minser",
+    "settings": "Nastavení",
+    "add": "Přidat",
+    "quit": "Přestat",
+    "startAtLogin": "Automatické spuštění",
+    "resetToDefaults": "Obnovit výchozí nastavení",
+    "areYouSure": "Jsi si jistá?",
+    "yes": "Ano",
+    "no": "Ne",
+    "up": "Nahoru",
+    "provision": "Ustanovení",
+    "suspend": "Pozastavit",
+    "resume": "Životopis",
+    "reload": "Znovu načíst",
+    "halt": "Stůj",
+    "destroy": "Zničit",
+    "update": "Aktualizace pluginů",
+    "repair": "Oprava pluginů",
+    "box": "Krabice",
+    "provider": "Poskytovatel",
+    "status": "Postavení" 
+  },
+   "about": {
+    "vm": "Minser",
+    "vmApp":  "Spravujte své vaganty",
+    "latestVersion": "poslední verze:",
+    "checking": "Kontrola ...",
+    "downloading": "Stahování ...",
+    "copyright": "Autorská práva",
+    "sponsor": "Sponzorováno"
+  },
+  "settings": {
+    "settings": "Nastavení",
+    "language": "Jazyk",
+    "resetToDefaults": "Obnovit výchozí nastavení"
+  },
+  "process": {
+    "newVersion": "Nová verze je k dispozici!"
+  }
+}

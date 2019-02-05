@@ -1,0 +1,46 @@
+{
+  "main": {
+    "header": "Minser",
+    "version": "V {{version}}",
+    "downloadLatest": "Faça o download mais recente",
+    "about": "Sobre",
+    "aboutVM": "Sobre | Minser",
+    "settings": "Configurações",
+    "add": "Acrescentar",
+    "quit": "Sair",
+    "startAtLogin": "Começo automático",
+    "resetToDefaults": "Redefinir os padrões",
+    "areYouSure": "Redefinir os padrões",
+    "yes": "Sim",
+    "no": "Não",
+    "up": "Pra cima",
+    "provision": "Provisão",
+    "suspend": "Suspender",
+    "resume": "Retomar",
+    "reload": "Zarepetować",
+    "halt": "Parar",
+    "destroy": "Destruir",
+    "update": "Atualização do plugin",
+    "repair": "Reparação do plugin",
+    "box": "Caixa",
+    "provider": "Provedor",
+    "status": "Estado" 
+  },
+   "about": {
+    "vm":  "Minser",
+    "vmApp": "Gerencie suas máquinas vagabundas",
+    "latestVersion": "a última versão:",
+    "checking": "Verificação ...",
+    "downloading": "Downloading ...",
+    "copyright": "Direito autoral",
+    "sponsor": "Patrocinado por"
+  },
+  "settings": {
+    "settings": "Configurações",
+    "language": "Língua",
+    "resetToDefaults": "Redefinir os padrões"
+  },
+  "process": {
+    "newVersion": "Nova versão está disponível!"
+  }
+}
