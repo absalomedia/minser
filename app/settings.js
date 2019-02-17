@@ -24,11 +24,17 @@ ipcRenderer.on('renderSettings', (event, data) => {
   }
 
   document.getElementById('language').value = data['language']
+  document.getElementById('key').value = data['key']
   eventsAttached = true
 })
 
 document.getElementById('defaults').addEventListener('click', function (e) {
   ipcRenderer.send('set-default-settings', [])
+})
+
+document.getElementById('key').addEventListener('change', function (e) {
+  ipcRenderer.send('save-setting', 'key', e.target.value)
+  window.location.reload()
 })
 
 document.getElementById('language').addEventListener('change', function (e) {

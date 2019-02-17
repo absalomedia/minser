@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="/app/assets/images/logo.gif" alt="Minser" width="400px">
+    <img src="/app/assets/images/logo.png" alt="Minser" width="400px">
     <br>
     Minser
 </h1>
