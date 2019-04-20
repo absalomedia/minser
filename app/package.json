@@ -19,8 +19,7 @@
     "converter"
   ],
   "author": "Lawrence Meckan <media@absalom.biz>",
-  "contributors": [
-  ],
+  "contributors": [],
   "license": "MIT",
   "dependencies": {
     "@uppy/companion": "^0.17.4",
