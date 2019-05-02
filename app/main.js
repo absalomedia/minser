@@ -28,10 +28,6 @@ const path = require('path')
 const proc = require('child_process')
 process.env.PATH = shellPath.sync()
 
-if (process.platform === 'win32') {
-autoUpdater.autoDownload = true
-}
-
 function getIcon(path_icon) {
     return nativeImage.createFromPath(path_icon).resize({width: 16})
 }
@@ -128,24 +124,6 @@ function startI18next () {
 		log.info('The system is resuming')
 	})
 	}
-
-	
-if (process.platform === 'win32') {
-	autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-		const dialogOpts = {
-			type: 'info',
-			buttons: [i18next.t('main.yes'), i18next.t('main.no')],
-			title: i18next.t('about.checking') + ' ' + i18next.t('about.vm'),
-			message: process.platform === 'win32' ? releaseNotes : releaseName,
-			detail: i18next.t('main.update') + ': ' + i18next.t('main.areYouSure')
-	}
-
-	dialog.showMessageBox(dialogOpts, (response) => {
-		if (response === 0) autoUpdater.quitAndInstall()
-		})
-	})
-}
-	
 	
 	function winStyle(title) {
 		window = new BrowserWindow({
