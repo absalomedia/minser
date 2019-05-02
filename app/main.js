@@ -1,8 +1,6 @@
 const {app, Menu, Tray, BrowserWindow, ipcMain, shell, nativeImage, dialog} = require('electron')
 const i18next = require('i18next')
 const Backend = require('i18next-node-fs-backend')
-const vagrant = require('node-vagrant')
-const heartbeats = require('heartbeats')
 let VersionChecker = require('./utils/versionChecker')
 const log = require('electron-log')
 
@@ -41,7 +39,6 @@ function getIcon(path_icon) {
 const trayActive = getIcon(path.join(__dirname,'assets/logo/trayIcon.png'))
 const trayWait = getIcon(path.join(__dirname,'assets/logo/trayIconWait.png'))
 const icon = path.join(__dirname,'/assets/logo/windowIcon.png')
-const heart = heartbeats.createHeart(7000)
 
 let aboutUs = null
 let appIcon = null
@@ -164,24 +161,6 @@ if (process.platform === 'win32') {
 	 return window 
  }
 
- function addMachine () {
-	dialog.showOpenDialog({ filters: [
-		{ title: i18next.t('main.add'), name: 'Vagrantfile'}]},
-		(fileNames) => {
-    // fileNames is an array that contains all the selected
-    if(fileNames === undefined){
-				log.warn('No file selected')
-        return
-    } 
-
-		if(fileNames[0].includes('Vagrantfile') === true) {
-				var cwder = fileNames[0].replace('Vagrantfile','')
-				machiner = vagrant.create({ cwd: cwder})
-				machiner.up(function(err, out) {})
-			}
-		})
- 	}
-
   function showAboutWindow () {
 	if (aboutWin) {
 	  aboutWin.show()
@@ -208,34 +187,24 @@ function showSettingsWindow () {
   })
 }
 
+function showConvertWindow () {
+	if (conWin) {
+	  conWin.show()
+	  return
+	}
+	const modalPath = `file://${__dirname}/convert.html`
+	conWin = winStyle('main.aboutVM', {version: app.getVersion()})
+	conWin.loadURL(modalPath)
+	conWin.on('closed', () => {
+	  conWin = null
+	})
+	}
+
+
 function saveDefaultsFor (array, next) {
   for (let index in array) {
     settings.set(array[index], defaultSettings[array[index]])
   }
-}
-
-function boxOptions(note,box,index,contextMenu, action)
-{
-	console.log(contextMenu)
-	var text = 	{
-					label: note,
-					box: index,
-					id: box['path'],
-					click: function(menuItem)
-					{
-						runMachine(contextMenu, menuItem,action)
-					}
-				}
-	return text
-}
-
-function boxStatus(index,note,box,value) 
-{
-	var text =   {
-					label : note+' : '+box[index][value],
-					enabled: false
-				}
-	return text
 }
 
 function errorBox(code,stderr) 
@@ -260,36 +229,6 @@ function getUserHome() {
 	return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']
 }
 
-function boxDetails(callback)
-{
-	var box = []
-
-	vagrant.globalStatus(function(err, data) 
-		{
-
-			if (err) {
-				errorBox(err)
-				log.error(err)
-			}
-		
-			var jsonData = JSON.parse(JSON.stringify(data))
-			for(var index in jsonData) { 
-				var short_path = jsonData[index]['cwd']
-				short_path = short_path.split('/').reverse().filter((v, i) => {
-					return i < 1
-				}).reverse().join('/')
-				box.push({
-					'short_path': short_path,
-					'path' 		: jsonData[index]['cwd'],
-					'state' 	: jsonData[index]['state'],
-					'name' 		: jsonData[index]['name'],
-					'provider'	: jsonData[index]['provider']
-				})
-			}	
-			return callback(box)
-		})
-}
-
 function buildTray() {
 	tray = new Tray(trayActive)
 	return tray
@@ -297,127 +236,15 @@ function buildTray() {
 
 function buildMenu(event) {
 	let menu = []
-		
-	tray.setImage(trayActive)
-	boxDetails( function(box)
-	{
-		if (global.shared.isNewVersion) {
-			menu.push({
-				label: i18next.t('main.downloadLatest'),
-				click: function () {
-					downloadLatestUpdate()
-				}
-			})
-		}
-
-		for(var index in box) {
-			menu.push(
-			{
-				label: box[index]['short_path'],
-				icon: getIcon(path.join(__dirname,'/assets/logo/'+box[index]['state']+'.png')),
-				submenu: [
-					{
-					label: i18next.t('main.up'),
-					box: index,
-					id: box[index]['path'],
-					click: function(menuItem)
-					{
-						runMachine(contextMenu, menuItem, 'up')
-					}
-				},
-				{
-					label: i18next.t('main.provision'),
-					box: index,
-					id: box[index]['path'],
-					click: function(menuItem)
-					{
-						runMachine(contextMenu, menuItem, 'provision')
-					}
-				},					
-				{
-					label: i18next.t('main.suspend'),
-					box: index,
-					id: box[index]['path'],
-					click: function(menuItem)
-					{
-						runMachine(contextMenu, menuItem, 'suspend')
-					}
-				},
-				{
-					label:i18next.t('main.resume'),
-					box: index,
-					id: box[index]['path'],
-					click: function(menuItem)
-					{
-						runMachine(contextMenu, menuItem, 'resume')
-					}
-				},
-				{
-					label:i18next.t('main.reload'),
-					box: index,
-					id: box[index]['path'],
-					click: function(menuItem)
-					{
-						runMachine(contextMenu, menuItem, 'reload')
-					}
-				},				
-				{
-					label: i18next.t('main.halt'),
-					box: index,
-					id: box[index]['path'],
-					click: function(menuItem)
-					{
-						runMachine(contextMenu, menuItem, 'halt')
-					}
-				},
-				{
-					label: i18next.t('main.update'),
-					box: index,
-					id: box[index]['path'],
-					click: function(menuItem)
-					{
-						runMachine(contextMenu, menuItem, 'update')
-					}
-				},
-				{
-					label: i18next.t('main.repair'),
-					box: index,
-					id: box[index]['path'],
-					click: function(menuItem)
-					{
-						runMachine(contextMenu, menuItem, 'repair')
-					}
-				},													
-				{
-											label: i18next.t('main.destroy'),
-											box: index,
-											id: box[index]['path'],
-											click: function(menuItem)
-											{
-													function getDialog() {
-															dialog.showMessageBox({
-																	type: 'warning',
-																	buttons: [i18next.t('main.yes'), i18next.t('main.no')],
-																	message:  i18next.t('main.areYouSure'),
-																	cancelId: 1,
-																	defaultId: 1
-															}, function(response) {
-																	if(response === 0) {
-																		runMachine(contextMenu, menuItem, 'destroy')
-																	}
-															})
-													}
-													getDialog()
-											}
-				},
-				sept(),
-				boxStatus(index,i18next.t('main.box'),box,'name'),
-				boxStatus(index,i18next.t('main.provider'),box,'provider'),
-				boxStatus(index,i18next.t('main.status'),box,'state')
-				]
-			})
-		}
-
+	
+	if (global.shared.isNewVersion) {
+		menu.push({
+		label: i18next.t('main.downloadLatest'),
+		click: function () {
+			downloadLatestUpdate()
+			}
+		})
+	}
 		menu.push(
 		sept(),
 		{
@@ -428,10 +255,10 @@ function buildMenu(event) {
 			}
 		},
 		{
-			label: i18next.t('main.add'),
+			label: i18next.t('main.convert'),
 			click: function (menuItem)
 			{
-				addMachine()
+				showConvertWindow()
 			}
 		},		
 		{
@@ -468,70 +295,12 @@ function buildMenu(event) {
 		tray.setToolTip(i18next.t('main.header'))
 		tray.setContextMenu(contextMenu)
 		return contextMenu
-
-	})
-	
-}
-
-function runMachine(contextMenu, menuItem, command)
-{
-	machine = vagrant.create({ cwd: menuItem.id})
-	tray.setImage(trayWait)
-	contextMenu.items[0].enabled = false
-	var parentID = menuItem.box
-	contextMenu.items[parentID].enabled = false
-	tray.setContextMenu(contextMenu)
-	switch(command) {
-		case 'up': machine.up(function(err, out) {})
-							 break
-		case 'provision': machine.provision(function(err, out) {})
-							 break
-    case 'suspend': machine.suspend(function(err, out) {})
-							 break
-	  case 'resume': machine.resume(function(err, out) {})
-							 break							 
-		case 'halt': machine.halt(function(err, out) {})
-							 break
-		case 'reload': machine.reload(function(err, out) {})
-							 break
-		case 'destroy': machine.destroy(function(err, out) {})
-							 break
-		case 'update': machine.pluginUpdate(function(err, out) {})
-							 break							 
-		case 'repair': machine.pluginRepair(function(err, out) {})
-							 break							 
-	}	
-}
-
-function trackMenu () {
-	boxDetails( function(box)
-	{
-		/*
-		if (Object.keys(box).length === 0 && box.constructor === Object) {
-			// Don't rebuild menu when box list is empty
-			heart.kill()
-		} else { */	
-			heart.createEvent(1, function(count, last) {
-				if (typeof contextMenu !== 'undefined' && contextMenu !== null) {
-					contextMenu.destroy
-					if (process.platform === 'win32') {
-							autoUpdater.checkForUpdates()
-					}
-					buildMenu()
-				if (heart.age === 10285) {
-					app.relaunch()
-					app.exit()
-						}
-		 			}
-			})
-	})
 }
 
 app.on('ready', loadSettings)
 app.on('ready', buildTray)
 app.on('ready', buildMenu)
 app.on('ready', startPowerMonitoring)
-app.on('ready', trackMenu)
 app.on('window-all-closed', () => {
   // do nothing, so app wont get closed
 })
