@@ -144,9 +144,9 @@ function startI18next () {
 	  aboutWin.show()
 	  return
 	}
-	const modalPath = `file://${__dirname}/about.html`
+	const modalPath = 'about.html'
 	aboutWin = winStyle('main.aboutVM', {version: app.getVersion()})
-	aboutWin.loadURL(modalPath)
+	aboutWin.loadFile(modalPath)
 	aboutWin.on('closed', () => {
 	  aboutWin = null
 	})
@@ -157,9 +157,9 @@ function showSettingsWindow () {
     settingsWin.show()
     return
   }
-  const modalPath = `file://${__dirname}/settings.html`
+  const modalPath = 'settings.html'
   settingsWin = winStyle('main.settings')
-  settingsWin.loadURL(modalPath)
+  settingsWin.loadFile(modalPath)
   settingsWin.on('closed', () => {
     settingsWin = null
   })
@@ -170,9 +170,9 @@ function showConvertWindow () {
 	  conWin.show()
 	  return
 	}
-	const modalPath = `file://${__dirname}/convert.html`
+	const modalPath = 'convert.html'
 	conWin = winStyle('main.aboutVM', {version: app.getVersion()})
-	conWin.loadURL(modalPath)
+	conWin.loadFile(modalPath)
 	conWin.on('closed', () => {
 	  conWin = null
 	})

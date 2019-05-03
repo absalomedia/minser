@@ -37,6 +37,7 @@
   },
   "settings": {
     "settings": "Settings",
+    "key": "API Key",
     "language": "Language",
     "resetToDefaults": "Reset to defaults"
   },

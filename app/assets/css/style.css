@@ -55,6 +55,12 @@ small{
 	font-weight: bold;
 	color: #b3b3b3;
 }
+input[type=text] {
+	width: 100%;
+	height: 3rem;
+	clear: both;
+	margin-bottom: 0.5rem;
+}
 #close-btn {
 	display: inline-block;
 	position: relative;
