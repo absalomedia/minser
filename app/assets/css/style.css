@@ -51,6 +51,10 @@ small{
 	font-size: 14px;
 	color:#333333;
 }
+.row span, .settings {
+	font-weight: bold;
+	color: #b3b3b3;
+}
 #close-btn {
 	display: inline-block;
 	position: relative;
