@@ -36,9 +36,6 @@ jspm_packages
 # Lib
 lib
 
-# npm package lock
-yarn.lock
-
 others
 .DS_Store
 .vscode
