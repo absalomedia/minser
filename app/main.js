@@ -35,6 +35,7 @@ function getIcon(path_icon) {
 const trayActive = getIcon(path.join(__dirname,'assets/logo/trayIcon.png'))
 const trayWait = getIcon(path.join(__dirname,'assets/logo/trayIconWait.png'))
 const icon = path.join(__dirname,'/assets/logo/windowIcon.png')
+const gotTheLock = app.requestSingleInstanceLock()
 
 let aboutUs = null
 let appIcon = null
@@ -47,23 +48,21 @@ var contextMenu
 global.shared = {
 	isNewVersion: false
   }
-  
-  let shouldQuit = app.makeSingleInstance(function (commandLine, workingDirectory) {
-	if (appIcon) {
-		dialog.showMessageBox({
-			buttons: [i18next.t('main.yes')],
-			message: 'Already running'
+
+if (!gotTheLock) {
+		log.info('Minser is already running.')
+		app.quit()
+} else {
+		app.on('second-instance', (event, commandLine, workingDirectory) => {
+			if (appIcon) {
+				dialog.showMessageBox({
+					buttons: [i18next.t('main.yes')],
+					message: 'Already running'
+				})
+			}
 		})
-	}
-  })
-  
-  if (shouldQuit) {
-	log.info('Minser is already running.')
-	app.quit()
-	return
-  }
-
-
+}
+	
 if(process.platform === 'darwin') {
     app.dock.hide()
 }
@@ -284,7 +283,6 @@ app.on('window-all-closed', () => {
 })
 
 app.on('before-quit', () => {
-  heart.kill()
 })
 
 function loadSettings () {
