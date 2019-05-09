@@ -1,8 +1,14 @@
 const {app, Menu, Tray, BrowserWindow, ipcMain, shell, nativeImage, dialog} = require('electron')
+const remote = require('electron').remote
 const i18next = require('i18next')
 const Backend = require('i18next-node-fs-backend')
 let VersionChecker = require('./utils/versionChecker')
 const log = require('electron-log')
+const path = require('path')
+const shellPath = require('shell-path')
+const command = require('shelljs/global')
+const fs = require('fs')
+const proc = require('child_process')
 
 if (process.platform === 'win32') {
 /*
@@ -20,12 +26,7 @@ log.transports.console.level = 'silly'
 
 const AppSettings = require('./utils/settings')
 const defaultSettings = require('./utils/defaultSettings')
-const command = require('shelljs/global')
 const jquery = require('jquery')
-const shellPath = require('shell-path')
-const fs = require('fs')
-const path = require('path')
-const proc = require('child_process')
 process.env.PATH = shellPath.sync()
 
 function getIcon(path_icon) {
@@ -67,25 +68,7 @@ if(process.platform === 'darwin') {
     app.dock.hide()
 }
 
-if (process.platform === 'win32') {
-	process.on('SIGINT', function () {
-	//graceful shutdown
-		vagrant.globalStatus(function(err, data) 
-		{
-		if (err) {
-			errorBox('Shutdown',err)
-			log.error(err)
-		} 
-		var jsonData = JSON.parse(JSON.stringify(data))
-		for(var index in jsonData) { 
-				machine = vagrant.create({ cwd: jsonData[index]['cwd']})
-				machine.halt(function(err, out) {})
-				}
-		})
-	}
-)}
-
-function startI18next () {
+function startI18next() {
 	i18next
 	  .use(Backend)
 	  .init({
@@ -93,7 +76,7 @@ function startI18next () {
 		fallbackLng: 'en',
 		debug: true,
 		backend: {
-		  loadPath: `${__dirname}/locales/{{lng}}.json`,
+		  loadPath: path.join(__dirname, '/locales/{{lng}}.json'),
 		  jsonIndent: 2
 		}
 	  }, function (err, t) {
@@ -103,7 +86,7 @@ function startI18next () {
 		}
 		if (appIcon) {
 		  buildMenu()
-		}
+			}
 	  })
   }
   
@@ -211,7 +194,7 @@ function buildTray() {
 	return tray
 }
 
-function buildMenu(event) {
+function buildMenu() {
 	let menu = []
 	
 	if (global.shared.isNewVersion) {
@@ -226,21 +209,21 @@ function buildMenu(event) {
 		sept(),
 		{
 			label: i18next.t('main.settings'),
-			click: function (menuItem)
+			click: function ()
 			{
 				showSettingsWindow()
 			}
 		},
 		{
 			label: i18next.t('main.convert'),
-			click: function (menuItem)
+			click: function ()
 			{
 				showConvertWindow()
 			}
 		},		
 		{
 			label: i18next.t('main.about'),
-			click: function (menuItem)
+			click: function ()
 			{
 				showAboutWindow()
 			}
@@ -276,11 +259,11 @@ function buildMenu(event) {
 
 app.on('ready', loadSettings)
 app.on('ready', buildTray)
-app.on('ready', buildMenu)
 app.on('ready', startPowerMonitoring)
 app.on('window-all-closed', () => {
   // do nothing, so app wont get closed
 })
+app.on('ready', buildMenu)
 
 app.on('before-quit', () => {
 })
