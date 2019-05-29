@@ -57,7 +57,7 @@ if (!gotTheLock) {
 		app.on('second-instance', (event, commandLine, workingDirectory) => {
 			if (appIcon) {
 				dialog.showMessageBox({
-					buttons: [i18next.t('main.yes')],
+					buttons: [i18next.t('main.quit')],
 					message: 'Already running'
 				})
 			}
@@ -196,8 +196,9 @@ function buildTray() {
 
 function buildMenu() {
 	let menu = []
-	
-	if (global.shared.isNewVersion) {
+
+	tray.setImage(trayActive)
+  if (global.shared.isNewVersion) {
 		menu.push({
 		label: i18next.t('main.downloadLatest'),
 		click: function () {
@@ -257,13 +258,20 @@ function buildMenu() {
 		return contextMenu
 }
 
+function trackMenu () {
+	buildMenu()
+}
+
+
 app.on('ready', loadSettings)
 app.on('ready', buildTray)
+app.on('ready', buildMenu)
 app.on('ready', startPowerMonitoring)
+app.on('ready', trackMenu)
 app.on('window-all-closed', () => {
   // do nothing, so app wont get closed
 })
-app.on('ready', buildMenu)
+
 
 app.on('before-quit', () => {
 })
