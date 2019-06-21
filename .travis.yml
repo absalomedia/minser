@@ -1,6 +1,4 @@
 language: node_js
-node_js:
-  - "10"
 
 os:
   - linux
@@ -16,7 +14,7 @@ cache:
     - $HOME/.cache/electron
     - $HOME/.cache/electron-builder
 
-node_js: "9"
+node_js: "10"
 
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
