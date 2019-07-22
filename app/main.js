@@ -1,5 +1,4 @@
 const {app, Menu, Tray, BrowserWindow, ipcMain, shell, nativeImage, dialog} = require('electron')
-const remote = require('electron').remote
 const i18next = require('i18next')
 const Backend = require('i18next-node-fs-backend')
 let VersionChecker = require('./utils/versionChecker')
@@ -9,6 +8,8 @@ const shellPath = require('shell-path')
 const command = require('shelljs/global')
 const fs = require('fs')
 const proc = require('child_process')
+const Store = require('electron-store')
+const store = new Store()
 
 if (process.platform === 'win32') {
 /*
@@ -24,8 +25,6 @@ startI18next()
 log.transports.file.level = 'silly'
 log.transports.console.level = 'silly'
 
-const AppSettings = require('./utils/settings')
-const defaultSettings = require('./utils/defaultSettings')
 const jquery = require('jquery')
 process.env.PATH = shellPath.sync()
 
@@ -76,9 +75,9 @@ function startI18next() {
 		fallbackLng: 'en',
 		debug: true,
 		backend: {
-		  loadPath: path.join(__dirname, '/locales/{{lng}}.json'),
-		  jsonIndent: 2
-		}
+			loadPath: `${__dirname}/locales/{{lng}}.json`,
+			jsonIndent: 2
+		  }
 	  }, function (err, t) {
 		if (err) {
 			log.error(err.stack)
@@ -109,15 +108,18 @@ function startI18next() {
 	
 	function winStyle(title) {
 		window = new BrowserWindow({
-		 width : 400,
-		 height : 600,
-		 resizable : false,
-		 fullscreen : false,
-		 frame: false,
-		 titleBarStyle: 'customButtonsOnHover',		
-		 icon : icon,
-		 title: i18next.t(title)
-	 })
+			width : 400,
+			height : 600,
+			resizable : false,
+			fullscreen : false,
+			frame: false,
+			titleBarStyle: 'customButtonsOnHover',		
+			icon : icon,
+			title: i18next.t(title),
+			webPreferences: {
+			   nodeIntegration: true
+			 }
+		})
 	 return window 
  }
 
@@ -161,10 +163,13 @@ function showConvertWindow () {
 	}
 
 
-function saveDefaultsFor (array, next) {
-  for (let index in array) {
-    settings.set(array[index], defaultSettings[array[index]])
-  }
+function saveDefaults () {
+	store.set({  
+		language: 'en',
+		key: '',
+		token: 0,
+		devtoken: 0
+	})
 }
 
 function errorBox(code,stderr) 
@@ -277,15 +282,12 @@ app.on('before-quit', () => {
 })
 
 function loadSettings () {
-	const dir = app.getPath('userData')
-	const settingsFile = '${dir}/config.json'
-	settings = new AppSettings(settingsFile)
-	i18next.changeLanguage(settings.get('language'))
+	i18next.changeLanguage(store.get('language'))
 }
 
 ipcMain.on('save-setting', function (event, key, value) {
-  settings.set(key, value)
-  settingsWin.webContents.send('renderSettings', settings.data)
+  store.set(key, value)
+  settingsWin.webContents.send('renderSettings', store.store)
   buildMenu()
 })
 
@@ -293,7 +295,7 @@ ipcMain.on('update-tray', function (event) {
 	buildMenu()
 })
 
-ipcMain.on('set-default-settings', function (event, data) {
+ipcMain.on('set-default-settings', function (event, store) {
   const options = {
     type: 'info',
     title: i18next.t('main.resetToDefaults'),
@@ -302,25 +304,20 @@ ipcMain.on('set-default-settings', function (event, data) {
   }
   dialog.showMessageBox(options, function (index) {
     if (index === 0) {
-      saveDefaultsFor(data)
-      settingsWin.webContents.send('renderSettings', settings.data)
+      saveDefaults()
+      settingsWin.webContents.send('renderSettings', store.store)
     }
   })
 })
 
 ipcMain.on('send-settings', function (event) {
-  settingsWin.webContents.send('renderSettings', settings.data)
+  settingsWin.webContents.send('renderSettings', store.store)
 })
 
-ipcMain.on('show-debug', function (event) {
-  const dir = app.getPath('userData')
-  const settingsFile = `${dir}/config.json`
-  aboutWin.webContents.send('debugInfo', settingsFile)
-})
 
 ipcMain.on('change-language', function (event, language) {
   i18next.changeLanguage(language)
   if (settingsWin) {
-    settingsWin.webContents.send('renderSettings', settings.data)
+    settingsWin.webContents.send('renderSettings', store.store)
   }
 })
