@@ -25,7 +25,7 @@ before_script:
 
 script:
   - npm install -g nyc
-  - nyc test
+  - npx nyc mocha
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn dist; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn dist-all; fi
 
