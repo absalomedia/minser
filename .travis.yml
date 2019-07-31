@@ -20,9 +20,6 @@ before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update && sudo apt-get install -q libxss-dev; fi
 
-before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then xvfb-run --server-args="-screen 0 1024x768x24" make test; fi
-
 script:
   - npm install -g nyc
   - npx nyc mocha
