@@ -119,7 +119,7 @@
     "electron-unhandled": "^3.0.1",
     "mocha": "^6.2.2",
     "nyc": "^14.1.1",
-    "sinon": "^7.5.0",
+    "sinon": "^8.0.1",
     "spectron": "^9.0.0",
     "standard": "^14.3.1"
   },
