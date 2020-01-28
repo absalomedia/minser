@@ -113,7 +113,7 @@
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.9",
     "cross-env": "^7.0.0",
-    "electron": "^7.1.7",
+    "electron": "^7.1.10",
     "electron-builder": "^22.3.2",
     "electron-is-dev": "^1.1.0",
     "electron-unhandled": "^3.0.2",
