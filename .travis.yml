@@ -1,10 +1,35 @@
 language: node_js
 
+# https://github.com/nodejs/Release
+# Specify current LTS version here, which is used for publishing to npm
+node_js:
+  - 10 # EOL: April 2021
+
 os:
   - linux
-  - osx
 
-services: 
+# https://github.com/nodejs/Release
+matrix:
+  fast_finish: true
+  include:
+    - name: "Windows build"
+      os: windows
+      cache: false # windows cache uploads are slow
+      env: YARN_GPG=no # starts gpg-agent that never exits
+
+    - name: "macOS build"
+      os: osx
+    
+    - name: "Packaging"
+      os: osx
+      
+    # Next node LTS version
+    - node_js: 13 # EOL: June 2019
+  allow_failures:
+  - name: "Packaging"
+
+
+services:
   - xvfb
 
 cache:
@@ -14,17 +39,19 @@ cache:
     - $HOME/.cache/electron
     - $HOME/.cache/electron-builder
 
-node_js: "10"
-
 before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update && sudo apt-get install -q libxss-dev; fi
+
+install:
+  - yarn --frozen-lockfile --non-interactive --network-timeout 300000
 
 script:
   - npm install -g nyc
   - npx nyc mocha
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn dist; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn dist-all; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn pack; fi
+  - if [[ "$TRAVIS_JOB_NAME" == "macOS build" ]]; then yarn pack; fi
+  - if [[ "$TRAVIS_JOB_NAME" == "Packaging" ]]; then travis_wait 30 yarn dist-all; fi
+
 
 notifications:
   email:
@@ -36,12 +63,14 @@ after_success:
 
 deploy:
   provider: releases
-  api_key: '$GITHUB_API_KEY'
+  api_key: 
+    secure: '$GITHUB_API_KEY'
   file:
     - 'dist/minser.dmg'
     - 'dist/minser.appx'
     - 'dist/minser.exe'
     - 'dist/minser-web-setup.exe'
+    - 'dist/minser-portable.exe'
     - 'dist/minser-i386.AppImage'
     - 'dist/minser-x86_64.AppImage'
     - 'dist/minser-i686.rpm'
