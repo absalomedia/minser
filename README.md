@@ -31,7 +31,7 @@ It is aimed to be translated into the following languages:
 A menubar/taskbar App based on <a href="http://electron.atom.io" target="_blank">Electron</a>.
 
 [![Build Status](https://travis-ci.org/absalomedia/minser.svg?branch=master)](https://travis-ci.org/absalomedia/minser) [![Build status](https://ci.appveyor.com/api/projects/status/1ju13idwcwthuvpf/branch/master?svg=true)](https://ci.appveyor.com/project/absalomedia/minser/branch/master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a6e3bb668722444d8a6bf8bf5af44b53)](https://www.codacy.com/app/media/minser?utm_source=github.com&utm_medium=referral&utm_content=absalomedia/minser&utm_campaign=badger) [![codecov](https://codecov.io/gh/absalomedia/minser/branch/master/graph/badge.svg)](https://codecov.io/gh/absalomedia/minser)
-![Github All Releases](https://img.shields.io/github/downloads/absalomedia/minser/total.svg) [![Patreon](https://img.shields.io/badge/patreon-donate-green.svg)](https://www.patreon.com/bePatron?u=14641360)
+![Github All Releases](https://img.shields.io/github/downloads/absalomedia/minser/total.svg) [![Patreon](https://img.shields.io/badge/patreon-donate-green.svg)](https://www.patreon.com/bePatron?u=14641360) [![Greenkeeper badge](https://badges.greenkeeper.io/absalomedia/minser.svg)](https://greenkeeper.io/)
 
 ## Download
 

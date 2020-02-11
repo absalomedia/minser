@@ -31,7 +31,7 @@
     "@uppy/tus": "^1.5.0",
     "@uppy/xhr-upload": "^1.4.0",
     "electron-fs-extra": "^1.0.0",
-    "electron-log": "^3.0.9",
+    "electron-log": "^4.0.6",
     "electron-settings": "^3.2.0",
     "electron-store": "^5.1.0",
     "electron-updater": "^4.2.0",
