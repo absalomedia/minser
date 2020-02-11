@@ -1,6 +1,6 @@
 const {app, Menu, Tray, BrowserWindow, ipcMain, shell, nativeImage, dialog} = require('electron')
 const i18next = require('i18next')
-const Backend = require('i18next-node-fs-backend')
+const Backend = require('i18next-sync-fs-backend')
 let VersionChecker = require('./utils/versionChecker')
 const log = require('electron-log')
 const path = require('path')
