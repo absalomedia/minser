@@ -114,7 +114,7 @@
     "coveralls": "^3.0.9",
     "cross-env": "^7.0.0",
     "electron": "^8.0.2",
-    "electron-builder": "^22.3.2",
+    "electron-builder": "^22.3.6",
     "electron-is-dev": "^1.1.0",
     "electron-unhandled": "^3.0.2",
     "mocha": "^7.1.0",
