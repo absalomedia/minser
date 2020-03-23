@@ -111,7 +111,7 @@
     "babel-preset-react": "^6.24.1",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "coveralls": "^3.0.9",
+    "coveralls": "^3.0.11",
     "cross-env": "^7.0.2",
     "electron": "^8.1.1",
     "electron-builder": "^22.4.1",
