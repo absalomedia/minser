@@ -102,7 +102,7 @@
   "contributors": [],
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.12.3",
+    "@babel/core": "^7.12.16",
     "@babel/preset-env": "^7.12.1",
     "@babel/register": "^7.10.1",
     "babel-eslint": "^10.1.0",
